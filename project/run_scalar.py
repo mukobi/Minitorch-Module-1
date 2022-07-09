@@ -5,12 +5,17 @@ Be sure you have minitorch installed in you Virtual Env.
 import minitorch
 import random
 
+INPUT_SIZE = 2
+OUTPUT_SIZE = 1
+
 
 class Network(minitorch.Module):
-    def __init__(self, hidden_layers):
+    def __init__(self, hidden_size):
         super().__init__()
         # TODO: Implement for Task 1.5.
-        raise NotImplementedError('Need to implement for Task 1.5')
+        self.layer1 = Linear(INPUT_SIZE, hidden_size)
+        self.layer2 = Linear(hidden_size, hidden_size)
+        self.layer3 = Linear(hidden_size, OUTPUT_SIZE)
 
     def forward(self, x):
         middle = [h.relu() for h in self.layer1.forward(x)]
@@ -21,6 +26,10 @@ class Network(minitorch.Module):
 class Linear(minitorch.Module):
     def __init__(self, in_size, out_size):
         super().__init__()
+        # Begin Gabe edit
+        self.in_size = in_size
+        self.out_size = out_size
+        # End Gabe edit
         self.weights = []
         self.bias = []
         for i in range(in_size):
@@ -40,7 +49,12 @@ class Linear(minitorch.Module):
 
     def forward(self, inputs):
         # TODO: Implement for Task 1.5.
-        raise NotImplementedError('Need to implement for Task 1.5')
+        outputs = [minitorch.Scalar(0)] * self.out_size
+        for j in range(self.out_size):
+            for i in range(self.in_size):
+                outputs[j] += inputs[i] * self.weights[i][j].value
+                outputs[j] += self.bias[j].value
+        return outputs
 
 
 def default_log_fn(epoch, total_loss, correct, losses):
@@ -48,9 +62,9 @@ def default_log_fn(epoch, total_loss, correct, losses):
 
 
 class ScalarTrain:
-    def __init__(self, hidden_layers):
-        self.hidden_layers = hidden_layers
-        self.model = Network(self.hidden_layers)
+    def __init__(self, hidden_size):
+        self.hidden_size = hidden_size
+        self.model = Network(self.hidden_size)
 
     def run_one(self, x):
         return self.model.forward(
@@ -60,7 +74,7 @@ class ScalarTrain:
     def train(self, data, learning_rate, max_epochs=500, log_fn=default_log_fn):
         self.learning_rate = learning_rate
         self.max_epochs = max_epochs
-        self.model = Network(self.hidden_layers)
+        self.model = Network(self.hidden_size)
         optim = minitorch.SGD(self.model.parameters(), learning_rate)
 
         losses = []
@@ -99,8 +113,16 @@ class ScalarTrain:
 
 
 if __name__ == "__main__":
+    print('Training on Simple...')
     PTS = 50
-    HIDDEN = 2
-    RATE = 0.5
+    HIDDEN_SIZE = 2
+    RATE = 0.1
     data = minitorch.datasets["Simple"](PTS)
-    ScalarTrain(HIDDEN).train(data, RATE)
+    ScalarTrain(HIDDEN_SIZE).train(data, RATE)
+
+    print('\nTraining on Xor...')
+    PTS = 50
+    HIDDEN_SIZE = 10
+    RATE = 0.03
+    data = minitorch.datasets["Xor"](PTS)
+    ScalarTrain(HIDDEN_SIZE).train(data, RATE)

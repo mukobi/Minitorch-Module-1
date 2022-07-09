@@ -19,6 +19,9 @@ def mul(x, y):
 def div(x, y):
     ":math:`f(x, y) = x / y`"
     # GABE_MODIFICATION
+    # if y == 0:
+    #     # return math.inf
+    #     return 1e10
     return x / y
 
 
