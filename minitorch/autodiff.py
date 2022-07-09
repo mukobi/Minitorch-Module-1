@@ -308,7 +308,7 @@ def topological_sort(variable):
     output = []
 
     def visit(variable):
-        if is_constant(variable):
+        if is_constant(variable) or variable.unique_id in visited:
             return
 
         if variable.history is not None and variable.history.inputs is not None:
