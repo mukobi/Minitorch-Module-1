@@ -314,7 +314,7 @@ def topological_sort(variable):
         if variable.history is not None and variable.history.inputs is not None:
             for input in variable.history.inputs:
                 visit(input)
-        
+
         visited.add(variable.unique_id)
         output.append(variable)
 
@@ -367,4 +367,3 @@ def backpropagate(final_variable, deriv):
                     if input.unique_id not in vars_to_derivs.keys():
                         vars_to_derivs[input.unique_id] = 0.0
                     vars_to_derivs[input.unique_id] += input_deriv
-    
