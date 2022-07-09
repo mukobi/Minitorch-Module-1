@@ -358,7 +358,7 @@ def backpropagate(final_variable, deriv):
         # if the Variable is not a leaf
         else:
             # call .backprop_step on the last function that created it with derivative as dout
-            derivatives = variable.history.backprop_step(derivative)
+            derivatives = wrap_tuple(variable.history.backprop_step(derivative))
 
             # loop through all the Variables+derivative produced by the chain rule
             for input, input_deriv in zip(variable.history.inputs, derivatives):
