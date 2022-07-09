@@ -102,7 +102,7 @@ def relu(x):
         float : relu value
     """
     # TODO: Implement for Task 0.1.
-    return max(x, 0)
+    return max(x, 0.0)
 
 
 EPS = 1e-6

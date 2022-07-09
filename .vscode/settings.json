@@ -7,5 +7,5 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.formatting.provider": "black",
-    "python.defaultInterpreterPath": "../../venv/Scripts/python.exe"
+    "python.defaultInterpreterPath": "../venv/Scripts/python.exe"
 }
